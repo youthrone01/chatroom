@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type ="text/javascript" src="/socket.io/socket.io.js"></script>
+        <script type ="text/javascript">
+             $(document). ready(function (){
+                // this triggers the connection event in our server!
+                var socket  = io.connect();
+                // we'll write all the socket stuff after the above line!
+                var user = prompt("Please enter your name");
+                if(user != null){
+                    socket.emit("new_user",{user: user});
+                }else{
+                    user = prompt("Please enter your name");
+                }
+                socket.on('all_user', function(data){
+                    var all_user = data.res;
+                    console.log(data.res);
+                    var text = "<ul>";
+                    for(var i = 0; i < all_user.length; i++){
+                        text = text + "<li>"+all_user[i].name+"</li>";
+                    }
+                    text = text + "</ul>";
+                    $('#display').html(text);
+                });
+            })
+        </script>
+    </head>
+    <body>
+        <div id="display">
+
+        </div>
+    
+    </body>
+</html>
